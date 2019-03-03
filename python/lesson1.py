@@ -1,39 +1,56 @@
-# based on http://nehe.gamedev.net/tutorial/creating_an_opengl_window_(win32)/13001/
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from PyQt5 import QtWidgets as qWidget
-from PyQt5 import uic
+"""
+    Based on Lesson 1 from Nehe Productions
+    https://nehe.gamedev.net/tutorial/creating_an_opengl_window_(win32)/13001/
+"""
+
 import sys
+from OpenGL.GL import glViewport, glMatrixMode, glLoadIdentity, \
+        glShadeModel, glClearColor, glClearDepth, glEnable, glDepthFunc, \
+        glHint, glClear, GL_SMOOTH, GL_DEPTH_TEST, GL_LEQUAL, \
+        GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST, GL_PROJECTION, \
+        GL_MODELVIEW, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
+from OpenGL.GLU import gluPerspective
+from PyQt5 import QtWidgets, uic
 
+class Ui(QtWidgets.QMainWindow):
+    """
+        Ui class
+    """
 
-class Ui(qWidget.QMainWindow):
+    def __init__(self):
 
-    def __init__(self, *args):
-        
-        super(Ui, self).__init__()
+        super().__init__()
         uic.loadUi('./ui_files/OpenGLScreen.ui', self)
-        self.title = 'Lesson1'
-        
-        self.openGLWidget.resizeGL = self.resizeGL
-        self.openGLWidget.initializeGL = self.initializeGL
-        self.openGLWidget.paintGL = self.paintGL
-        
-        # Actions
-        self.actionClose.triggered.connect(self.closeApp)
 
-    def closeApp(self):
+        self.openGLWidget.resizeGL = self.resize_gl
+        self.openGLWidget.initializeGL = self.initialize_gl
+        self.openGLWidget.paintGL = self.paint_gl
+
+        # Actions
+        self.actionClose.triggered.connect(self.close_app)
+
+    def close_app(self):
+        """
+            close app
+        """
         self.close()
 
-    def resizeGL(self, width, height):
+    def resize_gl(self, width, height):
+        """
+            resize window
+        """
 
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(45.0, width / height, 0.1, 100.0)
-        glMatrixMode(GL_MODELVIEW);
+        glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
 
-    def initializeGL(self):
+    def initialize_gl(self):
+        """
+            initialize OpenGL
+        """
 
         glShadeModel(GL_SMOOTH)
         glClearColor(0.0, 0.0, 0.0, 0.0)
@@ -42,12 +59,15 @@ class Ui(qWidget.QMainWindow):
         glDepthFunc(GL_LEQUAL)
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
 
-    def paintGL(self):
+    def paint_gl(self):
+        """
+            paint OpenGL
+        """
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
-app = qWidget.QApplication(sys.argv)
+app = QtWidgets.QApplication(sys.argv)
 window = Ui()
 window.show()
 sys.exit(app.exec_())
