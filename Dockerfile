@@ -15,7 +15,9 @@ RUN apt install -y vim=2:9.0.1378-2 \
         screen=4.9.0-4 \
         python3-opengl=3.1.6+dfsg-3 \
         python3-pyqt5=5.15.9+dfsg-1 \
-        pylint=2.16.2-2
+        pylint=2.16.2-2 \
+        cpplint=1.6.1-2 \
+        lynx=2.9.0dev.12-1
 
 # TODO: configure user
 #--extension-pkg-whitelist=PyQt5.QtWidgets
@@ -26,3 +28,5 @@ RUN sed -i 's/extension-pkg-whitelist=/extension-pkg-whitelist=PyQt5.QtWidgets/g
 #QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root
 RUN echo "export XDG_RUNTIME_DIR=/tmp/pyqt5_runtime" >> /root/.bashrc
 RUN echo "export RUNLEVEL=3" >> /root/.bashrc
+
+RUN cd /tmp && git clone https://github.com/KhronosGroup/OpenGL-Refpages.git
